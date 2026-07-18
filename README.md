@@ -21,15 +21,21 @@ npm run start
 Firestore:
 - 로그인한 사용자의 진행 상황(레벨/티켓 등)은 `firebase.ts` + `App.tsx`를 통해 `users/{uid}` 문서에 자동 저장/로드됩니다. 기기를 바꿔도 같은 Google 계정으로 로그인하면 이어집니다.
 
-## 네이티브 개발 빌드 (Google 로그인 / AdMob 테스트용)
+## 네이티브 빌드 (Google 로그인 / AdMob 테스트용)
 
 ```bash
+# 개발 서버(npm run start)에 붙는 dev client — 코드 수정하며 바로 테스트할 때
 eas build --profile development --platform android
-# 또는
-eas build --profile development --platform ios
+
+# 그 자체로 완결된 standalone APK — 용량이 훨씬 작고 컴퓨터 연결 불필요
+eas build --profile preview --platform android
 ```
 
-빌드된 dev client를 기기에 설치하고 `npm run start`로 연결하면 실제 Google 로그인과 AdMob 리워드 광고(현재는 Google 공식 테스트 광고 ID 사용 중)를 테스트할 수 있습니다.
+설치한 빌드를 열면 실제 Google 로그인과 AdMob 리워드 광고를 테스트할 수 있습니다. 개발 빌드(`__DEV__`가 true)에서는 항상 Google 공식 테스트 광고가 나가고, 프로덕션 빌드에서만 실제 광고 단위(`App.tsx`의 `REAL_REWARDED_AD_UNIT_ID`)가 사용됩니다.
+
+`react-native-google-mobile-ads`는 `16.0.3`으로 고정돼 있습니다 — 그 이후 버전(16.1.0+)이 번들하는 Google Mobile Ads SDK가 요구하는 Kotlin 버전이 Expo SDK 57 기본 Kotlin 컴파일러보다 높아서 빌드가 깨집니다.
+
+iOS 기기에 실제로 설치하려면 **Apple 개발자 프로그램($99/년)** 가입이 필요합니다 (애플이 서명 안 된 앱의 실기기 설치를 막아두어서, 우회할 방법이 없습니다). 계정이 없다면 웹 버전(`https://legendslsl.web.app`)으로 테스트하세요.
 
 ## 웹 빌드 & Firebase Hosting
 
@@ -42,8 +48,8 @@ npx firebase-tools deploy --only hosting
 
 ## AdMob
 
-`app.json`의 `react-native-google-mobile-ads` 플러그인 설정과 `App.tsx`의 `REWARDED_AD_UNIT_ID`는 현재 Google의 **공식 테스트 광고 ID**로 되어 있습니다. 실제 수익화를 시작하려면:
+Android는 실제 AdMob 앱/광고 단위가 연결되어 있습니다 (`app.json`의 `androidAppId`, `App.tsx`의 `REAL_REWARDED_AD_UNIT_ID`). 개발 빌드는 항상 테스트 광고를 쓰고, **프로덕션 빌드(`eas build --profile production`)에서만 실제 광고**가 나갑니다.
 
-1. https://admob.google.com 에서 계정을 만들고 이 앱을 등록해 실제 App ID / 광고 단위 ID를 발급받습니다.
-2. `app.json`의 `androidAppId`/`iosAppId`와 `App.tsx`의 `REWARDED_AD_UNIT_ID`를 실제 값으로 교체합니다.
-3. AdMob 결제 프로필(계좌/세금 정보)을 등록해야 수익이 지급됩니다.
+iOS는 아직 AdMob에 앱을 등록하지 않아서 `app.json`의 `iosAppId`가 Google 테스트 ID로 남아 있습니다. iOS에서도 수익화하려면 AdMob 콘솔에서 iOS 앱을 추가로 등록하고 `iosAppId`/iOS용 광고 단위 ID를 반영하세요.
+
+수익을 실제로 지급받으려면 AdMob에서 결제 프로필(계좌/세금 정보)을 등록해야 합니다.

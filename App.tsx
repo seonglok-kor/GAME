@@ -60,7 +60,9 @@ if (Platform.OS !== 'web') {
   }
 }
 // Using Google's public test unit until a real AdMob account/app is registered.
-const REWARDED_AD_UNIT_ID = TestIds ? TestIds.REWARDED : '';
+// Use Google's test unit in dev builds so testing never accidentally racks up/skews real ad stats.
+const REAL_REWARDED_AD_UNIT_ID = 'ca-app-pub-5778014099888953/2679353392';
+const REWARDED_AD_UNIT_ID = __DEV__ && TestIds ? TestIds.REWARDED : REAL_REWARDED_AD_UNIT_ID;
 
 const GOOGLE_WEB_CLIENT_ID = (() => {
   try {
