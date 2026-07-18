@@ -2,6 +2,14 @@
   "projects": {
     "default": "slgame0913"
   },
-  "targets": {},
+  "targets": {
+    "slgame0913": {
+      "hosting": {
+        "legendslsl": [
+          "legendslsl"
+        ]
+      }
+    }
+  },
   "etags": {}
 }

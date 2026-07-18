@@ -6,4 +6,6 @@ export default {
   storageBucket: "YOUR_PROJECT.appspot.com",
   messagingSenderId: "SENDER_ID",
   appId: "APP_ID",
+  // From Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration (Web client ID)
+  googleWebClientId: "YOUR_GOOGLE_WEB_CLIENT_ID.apps.googleusercontent.com",
 };
